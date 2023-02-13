@@ -1,6 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 
-import { CommunicationProtocolEnum, DaprClient } from '@dapr/dapr';
+import { CommunicationProtocolEnum, DaprClient, LogLevel } from '@dapr/dapr';
 import { NextApiRequest, NextApiResponse } from 'next';
 import axios from "axios"
 
@@ -14,6 +14,9 @@ export default async function handler(
 
     const client = new DaprClient(config.DAPR_HOST, config.DAPR_HTTP_PORT, CommunicationProtocolEnum.HTTP, {
         daprApiToken: config.DAPR_API_TOKEN,
+        logger: {
+            level: LogLevel.Debug,
+        },
     });
 
     if (req.method === 'POST') {
@@ -33,19 +36,19 @@ export default async function handler(
 
         console.log("reading last order processed");
 
-        // let result = await client.state.get(config.ORDERS, "last")
+        let result = await client.state.get(config.ORDERS, "last")
+        console.log("got result "+result)
+        res.status(200).json({ result })
 
-        const stateStoreBaseUrl = `${config.DAPR_HOST}:${config.DAPR_HTTP_PORT}/v1.0/state/${config.ORDERS}`
-        // Get state from a state store
-        const orderResponse = await axios.get(`${stateStoreBaseUrl}/last`, {
-            headers: {
-                "dapr-api-token": config.DAPR_API_TOKEN,
-            },
-        })
 
-        console.log("Getting Order: ", orderResponse.data)
-
-        res.status(200).json({ result: orderResponse.data })
+        // const stateStoreBaseUrl = `${config.DAPR_HOST}:${config.DAPR_HTTP_PORT}/v1.0/state/${config.ORDERS}`
+        // const orderResponse = await axios.get(`${stateStoreBaseUrl}/last`, {
+        //     headers: {
+        //         "dapr-api-token": config.DAPR_API_TOKEN,
+        //     },
+        // })
+        // console.log("Getting Order: ", orderResponse.data)
+        // res.status(200).json({ result: orderResponse.data })
 
     } else {
         res.status(401).json({ error: "bad request" })
