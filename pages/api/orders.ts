@@ -2,6 +2,7 @@
 
 import { CommunicationProtocolEnum, DaprClient } from '@dapr/dapr';
 import { NextApiRequest, NextApiResponse } from 'next';
+import axios from "axios"
 
 import { config } from '../../src/common/config';
 
@@ -32,8 +33,19 @@ export default async function handler(
 
         console.log("reading last order processed");
 
-        let result = await client.state.get(config.ORDERS, "last")
-        res.status(200).json({ result })
+        // let result = await client.state.get(config.ORDERS, "last")
+
+        const stateStoreBaseUrl = `${config.DAPR_HOST}:${config.DAPR_HTTP_PORT}/v1.0/state/${config.ORDERS}`
+        // Get state from a state store
+        const orderResponse = await axios.get(`${stateStoreBaseUrl}/last`, {
+            headers: {
+                "dapr-api-token": config.DAPR_API_TOKEN,
+            },
+        })
+
+        console.log("Getting Order: ", orderResponse.data)
+
+        res.status(200).json({ result: orderResponse.data })
 
     } else {
         res.status(401).json({ error: "bad request" })
