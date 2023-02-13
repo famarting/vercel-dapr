@@ -15,8 +15,8 @@ export default async function handler(
         daprApiToken: config.DAPR_API_TOKEN,
     });
 
-    if (req.method === 'POST') {
-        let order = req.body;
+    if (req.method === 'POST' && req.body) {
+        let order = JSON.parse(req.body);
 
         console.log("processed order "+order?.id)
 
@@ -31,7 +31,7 @@ export default async function handler(
             value: processed,
         }])
 
-        res.status(200).end();
+        res.status(200).json({});
 
     } else {
         res.status(401).json({ error: "bad request" })
