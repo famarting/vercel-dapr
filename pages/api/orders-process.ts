@@ -9,12 +9,16 @@ export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse,
   ) {
+    console.log("received process orders request "+req.method + " "+req.url)
+
     const client = new DaprClient(config.DAPR_HOST, config.DAPR_HTTP_PORT, CommunicationProtocolEnum.HTTP, {
         daprApiToken: config.DAPR_API_TOKEN,
     });
 
     if (req.method === 'POST') {
         let order = req.body;
+
+        console.log("processed order "+order?.id)
 
         const processed = {
             ...order,
