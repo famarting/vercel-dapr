@@ -36,7 +36,11 @@ export default async function handler(
             {
               key: "last",
               value: processed
-            }
+            },
+            {
+              key: order.id,
+              value: processed
+            },
           ];
         const stateStoreBaseUrl = `http://${config.DAPR_HOST}:${config.DAPR_HTTP_PORT}/v1.0/state/${config.ORDERS}`
         await axios.post(`${stateStoreBaseUrl}`, state, {
