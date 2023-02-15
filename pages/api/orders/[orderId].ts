@@ -23,8 +23,6 @@ export default async function handler(
 
     if (req.method === 'GET') {
 
-        console.log("reading last order processed");
-
         // let result = await client.state.get(config.ORDERS, "last")
         // console.log("got result "+result)
         // res.status(200).json({ result })
@@ -38,7 +36,6 @@ export default async function handler(
         })
         let result = orderResponse.data;
 
-        console.log("got result "+result)
         res.status(200).json({ result })
 
     } else {

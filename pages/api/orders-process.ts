@@ -19,7 +19,7 @@ export default async function handler(
     if (req.method === 'POST' && req.body) {
         let order = JSON.parse(req.body);
 
-        console.log("processed order "+order?.id)
+        console.log("processing order "+JSON.stringify(order))
 
         const processed = {
             ...order,
