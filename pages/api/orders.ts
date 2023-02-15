@@ -27,7 +27,7 @@ export default async function handler(
 
         // let result = await client.pubsub.publish(config.PUBSUB_NAME, config.PUBSUB_TOPIC, order)
 
-        const publishURL = `${config.DAPR_HOST}:${config.DAPR_HTTP_PORT}/v1.0/publish/${config.PUBSUB_NAME}/${config.PUBSUB_TOPIC}`
+        const publishURL = `http://${config.DAPR_HOST}:${config.DAPR_HTTP_PORT}/v1.0/publish/${config.PUBSUB_NAME}/${config.PUBSUB_TOPIC}`
         const publishResponse = await axios.post(`${publishURL}`, order, {
             headers: {
                 "host": config.DAPR_HOST_DOMAIN,
@@ -49,7 +49,7 @@ export default async function handler(
         // console.log("got result "+result)
         // res.status(200).json({ result })
 
-        const stateStoreBaseUrl = `${config.DAPR_HOST}:${config.DAPR_HTTP_PORT}/v1.0/state/${config.ORDERS}`
+        const stateStoreBaseUrl = `http://${config.DAPR_HOST}:${config.DAPR_HTTP_PORT}/v1.0/state/${config.ORDERS}`
         const orderResponse = await axios.get(`${stateStoreBaseUrl}/last`, {
             headers: {
                 "host": config.DAPR_HOST_DOMAIN,

@@ -38,7 +38,7 @@ export default async function handler(
               value: processed
             }
           ];
-        const stateStoreBaseUrl = `${config.DAPR_HOST}:${config.DAPR_HTTP_PORT}/v1.0/state/${config.ORDERS}`
+        const stateStoreBaseUrl = `http://${config.DAPR_HOST}:${config.DAPR_HTTP_PORT}/v1.0/state/${config.ORDERS}`
         await axios.post(`${stateStoreBaseUrl}`, state, {
             headers: {
                 "host": config.DAPR_HOST_DOMAIN,
