@@ -17,9 +17,11 @@ export default async function handler(
     // });
 
     if (req.method === 'POST' && req.body) {
-        let order = JSON.parse(req.body);
+        let cloudEvent = JSON.parse(req.body);
 
-        console.log("processing order "+JSON.stringify(order))
+        console.log("processing order "+JSON.stringify(cloudEvent))
+
+        let order = cloudEvent.data;
 
         const processed = {
             ...order,
