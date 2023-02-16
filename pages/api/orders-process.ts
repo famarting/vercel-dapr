@@ -33,6 +33,10 @@ export default async function handler(
             key: "last",
             value: processed,
         }])
+        await client.state.save(config.ORDERS, [{
+            key: order.id,
+            value: processed,
+        }])
 
         // const state = [
         //     {
