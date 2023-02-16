@@ -12,12 +12,12 @@ export default async function handler(
   ) {
     console.log("received orders request "+req.method + " "+req.url)
 
-    // const client = new DaprClient(config.DAPR_HOST, config.DAPR_HTTP_PORT, CommunicationProtocolEnum.HTTP, {
-    //     daprApiToken: config.DAPR_API_TOKEN,
-    //     logger: {
-    //         level: LogLevel.Debug,
-    //     },
-    // });
+    const client = new DaprClient(config.DAPR_HOST, config.DAPR_HTTP_PORT, CommunicationProtocolEnum.HTTP, {
+        daprApiToken: config.DAPR_API_TOKEN,
+        logger: {
+            level: LogLevel.Debug,
+        },
+    });
 
     if (req.method === 'POST') {
 
@@ -32,16 +32,16 @@ export default async function handler(
             res.status(401).json({ error: "bad request" })
         }
 
-        // let result = await client.pubsub.publish(config.PUBSUB_NAME, config.PUBSUB_TOPIC, order)
+        let result = await client.pubsub.publish(config.PUBSUB_NAME, config.PUBSUB_TOPIC, order)
 
-        const publishURL = `http://${config.DAPR_HOST}:${config.DAPR_HTTP_PORT}/v1.0/publish/${config.PUBSUB_NAME}/${config.PUBSUB_TOPIC}`
-        await axios.post(`${publishURL}`, order, {
-            headers: {
-                "host": config.DAPR_HOST_DOMAIN,
-                "dapr-api-token": config.DAPR_API_TOKEN,
-            },
-        })
-        let result = true;
+        // const publishURL = `http://${config.DAPR_HOST}:${config.DAPR_HTTP_PORT}/v1.0/publish/${config.PUBSUB_NAME}/${config.PUBSUB_TOPIC}`
+        // await axios.post(`${publishURL}`, order, {
+        //     headers: {
+        //         "host": config.DAPR_HOST_DOMAIN,
+        //         "dapr-api-token": config.DAPR_API_TOKEN,
+        //     },
+        // })
+        // let result = true;
     
         if (result) {
             res.status(200).json({ result })
@@ -52,18 +52,16 @@ export default async function handler(
 
         console.log("reading last order processed");
 
-        // let result = await client.state.get(config.ORDERS, "last")
-        // console.log("got result "+result)
-        // res.status(200).json({ result })
+        let result = await client.state.get(config.ORDERS, "last")
 
-        const stateStoreBaseUrl = `http://${config.DAPR_HOST}:${config.DAPR_HTTP_PORT}/v1.0/state/${config.ORDERS}`
-        const orderResponse = await axios.get(`${stateStoreBaseUrl}/last`, {
-            headers: {
-                "host": config.DAPR_HOST_DOMAIN,
-                "dapr-api-token": config.DAPR_API_TOKEN,
-            },
-        })
-        let result = orderResponse.data;
+        // const stateStoreBaseUrl = `http://${config.DAPR_HOST}:${config.DAPR_HTTP_PORT}/v1.0/state/${config.ORDERS}`
+        // const orderResponse = await axios.get(`${stateStoreBaseUrl}/last`, {
+        //     headers: {
+        //         "host": config.DAPR_HOST_DOMAIN,
+        //         "dapr-api-token": config.DAPR_API_TOKEN,
+        //     },
+        // })
+        // let result = orderResponse.data;
 
         console.log("got result "+result)
         res.status(200).json({ result })
