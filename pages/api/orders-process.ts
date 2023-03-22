@@ -23,6 +23,11 @@ export default async function handler(
 
         let order = cloudEvent.data;
 
+        if (!order.id) {
+            res.status(401).json({ error: "bad request" })
+            return;
+        }
+
         const processed = {
             ...order,
             processed: true,
