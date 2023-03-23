@@ -31,9 +31,17 @@ export default async function handler(
         };
 
         let result = await client.pubsub.publish(config.PUBSUB_NAME, config.PUBSUB_TOPIC, order)
-        console.log("random orger published "+result)
+        console.log("random order publish response "+result)
 
-        res.status(200).json({});
+        if (result) {
+            res.status(200).json({});
+        } else {
+            res.status(500).json({
+                pubsub: config.PUBSUB_NAME,
+                topic: config.PUBSUB_TOPIC,
+                result,
+            });
+        }
 
     } else {
         res.status(401).json({ error: "bad request" })
