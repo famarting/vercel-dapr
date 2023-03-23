@@ -17,10 +17,13 @@ export default async function handler(
         daprApiToken: config.DAPR_API_TOKEN,
     });
 
-    if (req.method === 'POST' && req.body) {
-        let cloudEvent = JSON.parse(req.body);
+    if (req.method === 'POST') {
+        console.log("generating random order")
+        if (req.body) {
+            let cloudEvent = JSON.parse(req.body);
 
-        console.log("processing order "+JSON.stringify(cloudEvent))
+            console.log("received body "+JSON.stringify(cloudEvent))
+        }
 
         const order = {
             id: randomUUID(),
