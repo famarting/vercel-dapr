@@ -8,7 +8,7 @@ export default async function handler(
   ) {
     console.log("received webhook "+req.method + " " +req.url)
 
-    let response = { message: "Hello from webhook", date: new Date().toString };
+    let response = { message: "Hello from webhook", date: new Date().toString, requestBody: null };
     if (req.body) {
         response.requestBody = req.body;
     }
